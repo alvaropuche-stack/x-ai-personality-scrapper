@@ -1,0 +1,7 @@
+.env
+node_modules/
+pipeline/
+characters/
+cookies/
+chrome-profile/
+x-cookies.json

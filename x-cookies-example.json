@@ -1,0 +1,34 @@
+[
+  {
+    "name": "auth_token",
+    "value": "0705ae96d112649fb5a96d9f92fb1222c325e72b",
+    "domain": ".x.com",
+    "path": "/",
+    "secure": true,
+    "httpOnly": true
+  },
+  {
+    "name": "ct0",
+    "value": "5cbeb675725d4ad65eb979f89345ac9d138d0ebbd26abd900673eaf8fcadd8f80cec70b1c186dd91414acdf9aa8a1b0665cacb58d1a6b3dec10261db06df8701685b77f7d6bcf3da32b5ce659847a102",
+    "domain": ".x.com",
+    "path": "/",
+    "secure": true,
+    "httpOnly": false
+  },
+  {
+    "name": "twid",
+    "value": "u%3D1982754368555536385",
+    "domain": ".x.com",
+    "path": "/",
+    "secure": true,
+    "httpOnly": false
+  },
+  {
+    "name": "att",
+    "value": "1-2BeH5gDbBM24NfvtIpxibVtSGOSkiYfoEP8XeSzw",
+    "domain": ".x.com",
+    "path": "/",
+    "secure": true,
+    "httpOnly": true
+  }
+]
