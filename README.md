@@ -1,6 +1,6 @@
 # X Strive Scraper
 
-Pipeline for generating AI character files and training datasets by scraping public figures' online presence across Twitter and blogs.
+Pipeline for generating AI character files and training datasets by scraping public figures' online presence across Twitter and blogs. Extract real tweets with anti-detection browser automation and merge multiple accounts to create comprehensive AI personalities.
 
 > **IMPORTANT**: Create a new Twitter account for this tool. DO NOT use your main account as it may trigger Twitter's automation detection and result in account restrictions.
 
