@@ -4,7 +4,7 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 
 // Get arguments directly from process.argv
-const [,, newCharacter, character1, character2] = process.argv;
+const [,, newCharacter, ...sourceAccounts] = process.argv;
 
 async function promptForMergeOptions(sourceAccounts, availableTweets) {
   const answers = await inquirer.prompt([
@@ -37,11 +37,10 @@ async function displayTweetSample(tweets, sourceAccounts) {
 }
 
 async function main() {
-  const sourceAccounts = [character1, character2];
-
   if (!newCharacter || sourceAccounts.length < 2) {
-    Logger.error("Usage: node merge_characters.js <new_name> <account1> <account2>");
+    Logger.error("Usage: node merge_characters.js <new_name> <account1> <account2> [account3...]");
     Logger.info("Example: node merge_characters.js alfacito cryptocito alfaketchum");
+    Logger.info("Example: node merge_characters.js Vinci_Strive marclouvion 0x_Sero TheAhmadOsman");
     process.exit(1);
   }
 
@@ -76,6 +75,12 @@ async function main() {
     });
 
     Logger.success('✨ Character merge completed successfully!');
+    Logger.stats("📊 Merge Summary", {
+      "New Character": `@${newCharacter}`,
+      "Source Accounts": sourceAccounts.join(', '),
+      "Total Tweets": mergedTweets.length,
+      "Tweets per Account": options.tweetsPerAccount
+    });
 
   } catch (error) {
     Logger.error(`Failed to create merged character: ${error.message}`);
