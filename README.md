@@ -1,12 +1,12 @@
-# Degen Scraper
+# X Strive Scraper
 
 Pipeline for generating AI character files and training datasets by scraping public figures' online presence across Twitter and blogs.
 
 > **IMPORTANT**: Create a new Twitter account for this tool. DO NOT use your main account as it may trigger Twitter's automation detection and result in account restrictions.
 
-## New: Local Browser Scraping with Real Data
+## Local Browser Scraping with Real Data
 
-The scraper now supports **real data extraction** using your authenticated browser session, giving you access to **500+ tweets per account** instead of just 50 public tweets.
+The scraper supports **real data extraction** using your authenticated browser session, giving you access to **500+ tweets per account** instead of just 50 public tweets.
 
 ### Setup for Real Data Extraction
 
@@ -220,6 +220,12 @@ The merged characters include:
 - Check your cookies are valid
 - Ensure Twitter/X account is in good standing
 - Try re-exporting cookies
+
+**Issue**: "Retry button appears on Twitter"
+- If you see the retry button, you must wait a while before continuing
+- Do not force the process - Twitter is rate limiting you
+- Wait 10-30 minutes before trying again
+- Consider increasing delays in .env configuration
 
 **Issue**: "Rate limited"
 - Increase delays in .env configuration
