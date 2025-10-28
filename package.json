@@ -1,9 +1,13 @@
 {
-  "name": "degen_scraper",
+  "name": "x-ai-personality-scrapper",
   "version": "1.0.0",
   "main": "",
   "type": "module",
   "scripts": {
+    "interactive": "node interactive-cli.js",
+    "scrape": "node scrape-accounts.js",
+    "scrape-hybrid": "node scrape-accounts-hybrid.js",
+    "create-character": "node create-character.js",
     "generate-virtuals": "node src/virtuals/GenerateCharacter.js",
     "twitter": "node src/twitter/index.js",
     "blog": "node src/blog/blogScrape.js",

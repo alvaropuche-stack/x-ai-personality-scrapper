@@ -14,12 +14,57 @@ const __dirname = path.dirname(__filename);
 puppeteer.use(StealthPlugin());
 
 class LocalBrowserScraper {
-    constructor(username) {
+    constructor(username, maxTweets = 500) {
         this.username = username;
         this.tweets = [];
-        this.maxTweets = 1000; // Aumentado para TheAhmadOsman
+        this.maxTweets = maxTweets; // Límite configurable
         this.browser = null;
         this.page = null;
+    }
+
+    normalizeCookies(cookies) {
+        return cookies
+            .filter(cookie => {
+                // Skip cookies with null/undefined sameSite values that cause issues
+                if (cookie.sameSite === null || cookie.sameSite === undefined) {
+                    console.log(chalk.gray(`   Skipping cookie ${cookie.name} (sameSite is null/undefined)`));
+                    return false;
+                }
+                // Skip cookies without essential fields
+                if (!cookie.name || !cookie.value || !cookie.domain) {
+                    console.log(chalk.gray(`   Skipping cookie ${cookie.name} (missing essential fields)`));
+                    return false;
+                }
+                return true;
+            })
+            .map(cookie => {
+                const normalizedCookie = { ...cookie };
+
+                // Normalize sameSite values to Puppeteer-compatible format
+                if (normalizedCookie.sameSite) {
+                    const sameSiteLower = normalizedCookie.sameSite.toLowerCase();
+                    switch (sameSiteLower) {
+                        case 'no_restriction':
+                            normalizedCookie.sameSite = 'None';
+                            break;
+                        case 'lax':
+                            normalizedCookie.sameSite = 'Lax';
+                            break;
+                        case 'strict':
+                            normalizedCookie.sameSite = 'Strict';
+                            break;
+                        default:
+                            normalizedCookie.sameSite = 'Lax'; // Default fallback
+                    }
+                }
+
+                // Remove fields that Puppeteer doesn't accept
+                delete normalizedCookie.hostOnly;
+                delete normalizedCookie.session;
+                delete normalizedCookie.storeId;
+
+                return normalizedCookie;
+            });
     }
 
     async connectToBrowser() {
@@ -115,6 +160,10 @@ class LocalBrowserScraper {
             const cookiesData = await fs.readFile(cookiesPath, 'utf-8');
             cookies = JSON.parse(cookiesData);
             console.log(chalk.green(`Loaded ${cookies.length} cookies from x-cookies.json`));
+
+            // Normalize cookies for Puppeteer compatibility
+            cookies = this.normalizeCookies(cookies);
+            console.log(chalk.green(`Normalized ${cookies.length} cookies for browser compatibility`));
         } catch (error) {
             console.log(chalk.yellow('No x-cookies.json file found. Using example cookies...'));
             console.log(chalk.cyan('Create x-cookies.json with your Twitter cookies for full access.'));
@@ -123,8 +172,13 @@ class LocalBrowserScraper {
             cookies = [];
         }
 
-        await this.page.setCookie(...cookies);
-        console.log(chalk.green('Cookies loaded - authenticated session active'));
+        try {
+            await this.page.setCookie(...cookies);
+            console.log(chalk.green('Cookies loaded - authenticated session active'));
+        } catch (cookieError) {
+            console.log(chalk.red(`❌ Failed to set cookies: ${cookieError.message}`));
+            console.log(chalk.yellow('🔄 Attempting to continue without cookies...'));
+        }
     }
 
     async navigateToTwitterProfile() {
@@ -374,17 +428,20 @@ class LocalBrowserScraper {
 async function main() {
     const args = process.argv.slice(2);
     const username = args[0];
+    const maxTweets = args[1] ? parseInt(args[1]) : 500;
 
     if (!username) {
         console.error(chalk.red('Please provide a username:'));
         console.error(chalk.white('Example: node local_browser_scraper.js marclouvion'));
+        console.error(chalk.white('Example: node local_browser_scraper.js marclouvion 300'));
         process.exit(1);
     }
 
     console.log(chalk.bold.cyan(`🐦 Extracting tweets from @${username}`));
+    console.log(chalk.cyan(`📊 Max tweets: ${maxTweets}`));
     console.log(chalk.dim('═'.repeat(50)));
 
-    const scraper = new LocalBrowserScraper(username);
+    const scraper = new LocalBrowserScraper(username, maxTweets);
 
     try {
         // Connect to browser

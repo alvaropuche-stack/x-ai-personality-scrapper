@@ -1,4 +1,4 @@
-# X Ai Personality Strive Scraper
+# X AI Personality Strive Scraper
 
 Pipeline for generating AI character files and training datasets by scraping public figures' online presence across Twitter and blogs. Extract real tweets with anti-detection browser automation and merge multiple accounts to create comprehensive AI personalities.
 
